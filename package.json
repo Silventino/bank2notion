@@ -1,0 +1,16 @@
+{
+  "name": "bank2notion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@notionhq/client": "^2.2.10",
+    "dotenv": "^16.3.1",
+    "pdfreader": "^3.0.0"
+  }
+}
