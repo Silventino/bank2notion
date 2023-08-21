@@ -3,3 +3,4 @@ node_modules/
 lastInsertedDate.txt
 *.pdf
 build/
+*.log

@@ -11,17 +11,20 @@ function App() {
   const [pdf, setPdf] = useState<File | null>(null);
   const [notionToken, setNotionToken] = useState("");
   const [notionDatabaseId, setNotionDatabaseId] = useState("");
+  const [ignoreEntriesBefore, setIgnoreEntriesBefore] = useState<Date | null>(
+    null
+  );
 
   const handleSubmit = () => {
     const formData = new FormData();
 
     formData.append("bank", bank);
     formData.append("file_type", fileType);
-    formData.append("pdf", pdf as File);
+    formData.append("file", pdf as File);
     formData.append("notion_token", notionToken);
     formData.append("notion_database_id", notionDatabaseId);
 
-    fetch("http://localhost:8000/api/transactions/", {
+    fetch("http://127.0.0.1:5001/bank2notion/us-central1/uploadFile/upload", {
       method: "POST",
       body: formData,
     });
@@ -59,6 +62,18 @@ function App() {
                 fullWidth
                 value={pdf}
                 onChange={setPdf}
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                label={"Ignore entries before"}
+                type={"date"}
+                fullWidth
+                value={ignoreEntriesBefore?.toISOString().slice(0, 10)}
+                onChange={(event) =>
+                  setIgnoreEntriesBefore(new Date(event.target.value))
+                }
               />
             </Grid>
 
