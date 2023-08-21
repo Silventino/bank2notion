@@ -1,6 +1,14 @@
 /** @jsxImportSource @emotion/react */
 
-import { Box, Button, Card, CardContent, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  TextField,
+} from "@mui/material";
 import { MuiFileInput } from "mui-file-input";
 import { useState } from "react";
 import CustomSelect from "../CustomSelect";
@@ -14,26 +22,44 @@ function App() {
   const [ignoreEntriesBefore, setIgnoreEntriesBefore] = useState<Date | null>(
     null
   );
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = () => {
-    const formData = new FormData();
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("bank", bank);
+      formData.append("file_type", fileType);
+      formData.append("file", pdf as File);
+      formData.append("notion_token", notionToken);
+      formData.append("notion_database_id", notionDatabaseId);
+      formData.append(
+        "ignore_entries_before",
+        ignoreEntriesBefore?.toISOString() ?? ""
+      );
 
-    formData.append("bank", bank);
-    formData.append("file_type", fileType);
-    formData.append("file", pdf as File);
-    formData.append("notion_token", notionToken);
-    formData.append("notion_database_id", notionDatabaseId);
-
-    fetch("http://127.0.0.1:5001/bank2notion/us-central1/uploadFile/upload", {
-      method: "POST",
-      body: formData,
-    });
+      await fetch("http://127.0.0.1:5001/bank2notion/us-central1/uploadFile/", {
+        method: "POST",
+        body: formData,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    setLoading(false);
   };
 
   return (
     <Box display={"flex"} justifyContent={"center"} padding={4}>
       <Card sx={{ minWidth: 400, maxWidth: 600 }}>
         <CardContent>
+          <Box display={"flex"} justifyContent={"center"} marginBottom={2}>
+            <img
+              src={"assets/notion.png"}
+              alt={"notion logo"}
+              style={{ width: 60 }}
+            />
+          </Box>
+
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <CustomSelect
@@ -41,6 +67,7 @@ function App() {
                 value={bank}
                 onChange={setBank}
                 options={[{ name: "Itaú", value: "itaú" }]}
+                disabled={loading}
               />
             </Grid>
 
@@ -53,6 +80,7 @@ function App() {
                   { name: "Card Invoice", value: "card_invoice" },
                   { name: "Bank Statement", value: "bank_statement" },
                 ]}
+                disabled={loading}
               />
             </Grid>
 
@@ -62,18 +90,24 @@ function App() {
                 fullWidth
                 value={pdf}
                 onChange={setPdf}
+                disabled={loading}
               />
             </Grid>
 
             <Grid item xs={12}>
               <TextField
-                label={"Ignore entries before"}
+                label={"Ignore entries before (including)"}
                 type={"date"}
                 fullWidth
                 value={ignoreEntriesBefore?.toISOString().slice(0, 10)}
-                onChange={(event) =>
-                  setIgnoreEntriesBefore(new Date(event.target.value))
-                }
+                onChange={(event) => {
+                  const date = new Date(event.target.value);
+                  if (!isNaN(date.getTime())) {
+                    setIgnoreEntriesBefore(date);
+                  }
+                }}
+                InputLabelProps={{ shrink: true }}
+                disabled={loading}
               />
             </Grid>
 
@@ -83,6 +117,7 @@ function App() {
                 fullWidth
                 value={notionToken}
                 onChange={(event) => setNotionToken(event.target.value)}
+                disabled={loading}
               />
             </Grid>
 
@@ -92,18 +127,24 @@ function App() {
                 fullWidth
                 value={notionDatabaseId}
                 onChange={(event) => setNotionDatabaseId(event.target.value)}
+                disabled={loading}
               />
             </Grid>
 
             <Grid item xs={12}>
               <Box display={"flex"} justifyContent={"center"}>
-                <Button
-                  variant={"contained"}
-                  color={"primary"}
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    variant={"contained"}
+                    color={"primary"}
+                    onClick={handleSubmit}
+                    disabled={loading}
+                  >
+                    Submit
+                  </Button>
+                )}
               </Box>
             </Grid>
           </Grid>

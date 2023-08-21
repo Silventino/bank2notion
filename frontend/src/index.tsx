@@ -2,13 +2,13 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { amber } from "@mui/material/colors";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./components/App";
+import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { amber } from "@mui/material/colors";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -58,7 +58,6 @@ theme.typography = {
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
       <App />
     </ThemeProvider>
   </React.StrictMode>

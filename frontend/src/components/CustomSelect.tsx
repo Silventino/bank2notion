@@ -12,10 +12,11 @@ type Props = {
   options: Option[];
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 };
 
 function CustomSelect(props: Props) {
-  const { label, value, onChange, options } = props;
+  const { label, value, onChange, options, disabled } = props;
 
   return (
     <FormControl fullWidth>
@@ -26,6 +27,7 @@ function CustomSelect(props: Props) {
         onChange={(event) => {
           onChange(event.target.value as string);
         }}
+        disabled={disabled}
       >
         {options.map((option) => (
           <MenuItem value={option.value}>{option.name}</MenuItem>

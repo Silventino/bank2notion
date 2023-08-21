@@ -3,16 +3,12 @@ import admin from "firebase-admin";
 import express from "express";
 import "firebase-functions/logger/compat";
 import { filesUpload } from "./middleware.js";
+import readPdf, { CustomFile } from "./readPdf.js";
+import parseBankStatement from "./parseBankStatement.js";
+import parseCardInvoice from "./parseCardInvoice.js";
+import Expense from "./types/expenseType.js";
+import insertExpense from "./insertExpenseNotion.js";
 // const pdfreader = require("pdfreader");
-
-type CustomFile = {
-  fieldname: string;
-  originalname: string;
-  encoding: string;
-  mimetype: string;
-  buffer: Buffer;
-  size: number;
-};
 
 const app = express();
 
@@ -20,38 +16,45 @@ const app = express();
 admin.initializeApp();
 
 // Define your function to receive the file
-app.post("/upload", filesUpload, async (req, res) => {
-  const readPdf = async (file: CustomFile) => {
-    return new Promise(async (resolve, reject) => {
-      const pdfreader = await import("pdfreader");
-      const pdfReader = new pdfreader.PdfReader(null);
-      const items: string[] = [];
-      pdfReader.parseBuffer(file.buffer, (err: any, item: any) => {
-        if (err) {
-          reject(err);
-        } else if (!item) {
-          resolve(items);
-        } else if (item.text) {
-          items.push(item.text);
-        }
-      });
-    });
-  };
-
+app.post("/", filesUpload, async (req, res) => {
   try {
     res.set("Access-Control-Allow-Origin", "*");
     const files = req.files as any as CustomFile[];
     const file = files[0];
+    const ignoreEntriesBefore = req.body.ignore_entries_before;
+    const fileType = req.body.file_type;
+    const bank = req.body.bank;
+    const notionToken = req.body.notion_token;
+    const notionDatabaseId = req.body.notion_database_id;
 
-    console.log("File received:", file);
-    console.log("body received:", req.body);
     if (!file) {
       return res.status(400).send("No file uploaded.");
     }
 
     const items = await readPdf(file);
 
-    return res.status(200).json(items);
+    let expenses: Expense[] = [];
+    if (fileType === "bank_statement") {
+      expenses = parseBankStatement(bank, items, ignoreEntriesBefore);
+    } else if (fileType === "card_invoice") {
+      expenses = parseCardInvoice(bank, items, ignoreEntriesBefore);
+    }
+
+    if (expenses.length === 0) {
+      throw new Error("No expenses found");
+    }
+
+    const { Client } = await import("@notionhq/client");
+
+    const notion = new Client({
+      auth: notionToken,
+    });
+
+    for (const expense of expenses.slice(0, 4)) {
+      await insertExpense(notion, notionDatabaseId, expense);
+    }
+
+    return res.status(200).json(expenses);
   } catch (error) {
     console.error("Error uploading file:", error);
     return res.status(500).send("Error uploading file.");
