@@ -56,8 +56,7 @@ app.post("/", filesUpload, async (req, res) => {
 
     return res.status(200).json(expenses);
   } catch (error) {
-    console.error("Error uploading file:", error);
-    return res.status(500).send("Error uploading file.");
+    return res.status(500).send((error as Error).message);
   }
 });
 

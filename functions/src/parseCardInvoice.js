@@ -5,13 +5,11 @@ const parseCardInvoice = (bank, items, lastInsertedDate) => {
     throw new Error("Bank not supported.");
   }
 
-  console.log("Parsing PDF...");
   let tableEnded = false;
   const entries = [];
   for (let i = 0; i < items.length && !tableEnded; i++) {
     const item = items[i];
     if (item.includes("próximas faturas")) {
-      console.log("Table ended.");
       tableEnded = true;
       continue;
     }

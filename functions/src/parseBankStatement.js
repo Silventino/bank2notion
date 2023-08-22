@@ -5,7 +5,6 @@ const parseBankStatement = (bank, items, lastInsertedDate) => {
     throw new Error("Bank not supported.");
   }
 
-  console.log("Parsing PDF...");
   let tableBegan = false;
   let tableEnded = false;
   const entries = [];
@@ -16,7 +15,6 @@ const parseBankStatement = (bank, items, lastInsertedDate) => {
       continue;
     }
     if (item === "Aviso!") {
-      console.log("Table ended.");
       tableEnded = true;
       continue;
     }

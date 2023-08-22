@@ -75,7 +75,6 @@ const parsePdf = (items) => {
 
   const lastInsertedDate = fs.readFileSync("./lastInsertedDate.txt", "utf8");
 
-  console.log("Parsing PDF...");
   let tableBegan = false;
   let tableEnded = false;
   const entries = [];
@@ -86,7 +85,6 @@ const parsePdf = (items) => {
       continue;
     }
     if (item === "Aviso!") {
-      console.log("Table ended.");
       tableEnded = true;
       continue;
     }
