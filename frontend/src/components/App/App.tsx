@@ -39,10 +39,14 @@ function App() {
         ignoreEntriesBefore?.toISOString() ?? ""
       );
 
-      await fetch("http://127.0.0.1:5001/bank2notion/us-central1/uploadFile/", {
-        method: "POST",
-        body: formData,
-      });
+      await fetch(
+        // "http://127.0.0.1:5001/bank2notion/us-central1/uploadFile/",
+        "https://us-central1-bank2notion.cloudfunctions.net/uploadFile/",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
     } catch (err) {
       // TODO toastify
       console.error(err);
