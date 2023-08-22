@@ -50,7 +50,7 @@ app.post("/", filesUpload, async (req, res) => {
       auth: notionToken,
     });
 
-    for (const expense of expenses.slice(0, 4)) {
+    for (const expense of expenses) {
       await insertExpense(notion, notionDatabaseId, expense);
     }
 
