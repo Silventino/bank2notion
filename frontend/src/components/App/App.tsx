@@ -12,6 +12,7 @@ import {
 import { MuiFileInput } from "mui-file-input";
 import { useState } from "react";
 import CustomSelect from "../CustomSelect";
+import Footer from "../Footer";
 
 function App() {
   const [bank, setBank] = useState("itaú");
@@ -49,8 +50,15 @@ function App() {
   };
 
   return (
-    <Box display={"flex"} justifyContent={"center"} padding={4}>
-      <Card sx={{ minWidth: 400, maxWidth: 600 }}>
+    <Box
+      display={"flex"}
+      justifyContent={"space-between"}
+      alignItems={"center"}
+      padding={4}
+      flexDirection={"column"}
+      height={"100vh"}
+    >
+      <Card sx={{ maxWidth: 600 }}>
         <CardContent>
           <Box display={"flex"} justifyContent={"center"} marginBottom={2}>
             <img
@@ -150,6 +158,8 @@ function App() {
           </Grid>
         </CardContent>
       </Card>
+
+      <Footer />
     </Box>
   );
 }
