@@ -12,7 +12,7 @@ type Props<T> = {
   options: T[];
   getOptionLabel: (option: T) => string;
   getOptionValue: (option: T) => string;
-  value: string;
+  value: T;
   onChange: (value: string) => void;
   disabled?: boolean;
 };
@@ -32,7 +32,7 @@ function CustomSelect<T = Option>(props: Props<T>) {
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
       <Select
-        value={value}
+        value={getOptionValue(value)}
         label={label}
         onChange={(event) => {
           onChange(event.target.value as string);

@@ -110,7 +110,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
                 <TableCell sx={{ minWidth: 120 }}>
                   <CustomSelect<NotionProperty>
                     label={"Name"}
-                    value={notionPropertiesMap["name"]?.name}
+                    value={notionPropertiesMap["name"] ?? {}}
                     onChange={(value) => onChangeMap(value, "name")}
                     options={notionProperties}
                     disabled={loading}
@@ -121,7 +121,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
                 <TableCell sx={{ minWidth: 120 }}>
                   <CustomSelect<NotionProperty>
                     label={"Date"}
-                    value={notionPropertiesMap["date"]?.name}
+                    value={notionPropertiesMap["date"] ?? {}}
                     onChange={(value) => onChangeMap(value, "date")}
                     options={notionProperties}
                     disabled={loading}
@@ -132,7 +132,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
                 <TableCell sx={{ minWidth: 120 }}>
                   <CustomSelect<NotionProperty>
                     label={"Value"}
-                    value={notionPropertiesMap["value"]?.name}
+                    value={notionPropertiesMap["value"] ?? {}}
                     onChange={(value) => onChangeMap(value, "value")}
                     options={notionProperties}
                     disabled={loading}

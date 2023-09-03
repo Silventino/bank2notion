@@ -11,16 +11,20 @@ import {
 import { MuiFileInput } from "mui-file-input";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { ParsedPdf, SERVER_URL } from "../../constants";
+import { ParsedPdf, SERVER_URL, SUPPORTED_BANKS } from "../../constants";
 import CustomSelect from "../CustomSelect";
 
 type Props = {
   onPdfParsed: (data: ParsedPdf) => void;
 };
 
+type Bank = typeof SUPPORTED_BANKS[number];
+
 const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
-  const [bank, setBank] = useState("itaú");
-  const [fileType, setFileType] = useState("card_invoice");
+  const [bank, setBank] = useState<Bank>(SUPPORTED_BANKS[0]);
+  const [fileType, setFileType] = useState(
+    SUPPORTED_BANKS[0].supportedFiles[0]
+  );
   const [pdf, setPdf] = useState<File | null>(null);
   const [ignoreEntriesBefore, setIgnoreEntriesBefore] = useState<Date | null>(
     null
@@ -31,8 +35,8 @@ const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("bank", bank);
-      formData.append("file_type", fileType);
+      formData.append("bank", bank.value);
+      formData.append("file_type", fileType.value);
       formData.append("file", pdf as File);
       formData.append(
         "ignore_entries_before",
@@ -65,11 +69,19 @@ const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
       </Grid>
 
       <Grid item xs={12}>
-        <CustomSelect
+        <CustomSelect<Bank>
           label={"Bank"}
           value={bank}
-          onChange={setBank}
-          options={[{ name: "Itaú", value: "itaú" }]}
+          onChange={(newBankValue) => {
+            const newBank = SUPPORTED_BANKS.find(
+              (bank) => bank.value === newBankValue
+            );
+
+            if (newBank) {
+              setBank(newBank);
+            }
+          }}
+          options={SUPPORTED_BANKS}
           disabled={loading}
           getOptionValue={(option) => option.value}
           getOptionLabel={(option) => option.name}
@@ -80,11 +92,16 @@ const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
         <CustomSelect
           label={"File type"}
           value={fileType}
-          onChange={setFileType}
-          options={[
-            { name: "Card Invoice", value: "card_invoice" },
-            { name: "Bank Statement", value: "bank_statement" },
-          ]}
+          onChange={(newFileType) => {
+            const newFileTypeValue = bank.supportedFiles.find(
+              (fileType) => fileType.value === newFileType
+            );
+
+            if (newFileTypeValue) {
+              setFileType(newFileTypeValue);
+            }
+          }}
+          options={bank.supportedFiles}
           disabled={loading}
           getOptionValue={(option) => option.value}
           getOptionLabel={(option) => option.name}

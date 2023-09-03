@@ -5,3 +5,4 @@ lastInsertedDate.txt
 build/
 *.log
 .firebase/
+test/
