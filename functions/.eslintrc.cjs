@@ -27,5 +27,6 @@ module.exports = {
     "object-curly-spacing": [0],
     indent: ["error", 2],
     "require-jsdoc": 0,
+    indent: ["warn", 2],
   },
 };

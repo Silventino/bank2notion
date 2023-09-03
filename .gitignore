@@ -4,3 +4,4 @@ lastInsertedDate.txt
 *.pdf
 build/
 *.log
+.firebase/
