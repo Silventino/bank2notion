@@ -82,8 +82,10 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12}>
-        <Typography>Map PDF properties:</Typography>
+      <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+        <Typography variant={"h6"}>
+          3. Map PDF properties to Notion properties
+        </Typography>
       </Grid>
 
       <Grid item xs={12}>

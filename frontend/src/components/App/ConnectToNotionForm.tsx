@@ -1,6 +1,13 @@
 /** @jsxImportSource @emotion/react */
 
-import { Box, Button, CircularProgress, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { NotionProperties, SERVER_URL } from "../../constants";
 import { toast } from "react-toastify";
@@ -55,6 +62,10 @@ const ConnectToNotionForm: React.FC<Props> = (props) => {
 
   return (
     <Grid container spacing={3}>
+      <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+        <Typography variant={"h6"}>1. Connect to Notion</Typography>
+      </Grid>
+
       <Grid item xs={12}>
         <TextField
           label={"Notion API Token"}

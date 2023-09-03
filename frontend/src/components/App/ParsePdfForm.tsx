@@ -1,6 +1,13 @@
 /** @jsxImportSource @emotion/react */
 
-import { Box, Button, CircularProgress, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { MuiFileInput } from "mui-file-input";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -53,6 +60,10 @@ const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
 
   return (
     <Grid container spacing={3}>
+      <Grid item xs={12} display={"flex"} justifyContent={"center"}>
+        <Typography variant={"h6"}>2. Parse Bank PDF</Typography>
+      </Grid>
+
       <Grid item xs={12}>
         <CustomSelect
           label={"Bank"}
