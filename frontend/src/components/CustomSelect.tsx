@@ -7,16 +7,26 @@ type Option = {
   value: string;
 };
 
-type Props = {
+type Props<T> = {
   label: string;
-  options: Option[];
+  options: T[];
+  getOptionLabel: (option: T) => string;
+  getOptionValue: (option: T) => string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
 };
 
-function CustomSelect(props: Props) {
-  const { label, value, onChange, options, disabled } = props;
+function CustomSelect<T = Option>(props: Props<T>) {
+  const {
+    label,
+    value,
+    onChange,
+    options,
+    disabled,
+    getOptionLabel,
+    getOptionValue,
+  } = props;
 
   return (
     <FormControl fullWidth>
@@ -30,7 +40,9 @@ function CustomSelect(props: Props) {
         disabled={disabled}
       >
         {options.map((option) => (
-          <MenuItem value={option.value}>{option.name}</MenuItem>
+          <MenuItem key={getOptionValue(option)} value={getOptionValue(option)}>
+            {getOptionLabel(option)}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>

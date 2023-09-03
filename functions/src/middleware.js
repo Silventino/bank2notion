@@ -3,7 +3,7 @@ import os from "os";
 import fs from "fs";
 import path from "path";
 
-export function filesUpload(req, res, next) {
+export function parseRequest(req, res, next) {
   // See https://cloud.google.com/functions/docs/writing/http#multipart_data
   const bb = busboy({
     headers: req.headers,
