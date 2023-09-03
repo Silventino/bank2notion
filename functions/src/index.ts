@@ -46,8 +46,6 @@ app.post("/parsePdf", parseRequest, async (req, res) => {
     const ignoreEntriesBefore = req.body.ignore_entries_before as string;
     const fileType = req.body.file_type as string;
     const bank = req.body.bank as string;
-    // const notionToken = req.body.notion_token;
-    // const notionDatabaseId = req.body.notion_database_id;
 
     if (!file) {
       return res.status(400).send("No file uploaded.");
@@ -65,18 +63,6 @@ app.post("/parsePdf", parseRequest, async (req, res) => {
     if (expenses.length === 0) {
       throw new Error("No expenses found");
     }
-
-    // const { Client } = await import("@notionhq/client");
-
-    // const notion = new Client({
-    //   auth: notionToken,
-    // });
-    // console.log("notion", notion);
-
-    // for (const expense of expenses) {
-    //   console.log("expense", expense);
-    //   // await insertExpense(notion, notionDatabaseId, expense);
-    // }
 
     return res.status(200).json(expenses);
   } catch (error) {

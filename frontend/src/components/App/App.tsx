@@ -69,11 +69,4 @@ function App() {
   );
 }
 
-// fields:
-// bank
-// file type (card invoice or bank statement)
-// file upload
-// notion API
-// notion database ID
-
 export default App;

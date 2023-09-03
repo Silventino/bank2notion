@@ -46,9 +46,8 @@ const ConnectToNotionForm: React.FC<Props> = (props) => {
       onNotionConnected(properties);
 
       toast.success("Connected to Notion!");
-    } catch (err) {
-      // TODO toastify
-      toast.error("Error connecting to Notion");
+    } catch (err: any) {
+      toast.error(err.message ?? "Error connecting to Notion");
       console.error(err);
     }
     setLoading(false);

@@ -14,7 +14,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NotionProperty, ParsedPdf, SERVER_URL } from "../../constants";
 import CustomSelect from "../CustomSelect";
 import { toast } from "react-toastify";
@@ -36,6 +36,14 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
+      if (
+        notionPropertiesMap["name"] === undefined ||
+        notionPropertiesMap["date"] === undefined ||
+        notionPropertiesMap["value"] === undefined
+      ) {
+        throw new Error("You must map all properties");
+      }
+
       const formData = new FormData();
       formData.append(
         "notion_properties_map",
@@ -55,9 +63,9 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
       }
 
       toast.success("Data inserted into Notion!");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      toast.error("Error inserting data into Notion");
+      toast.error(err.message ?? "Error inserting data into Notion");
     }
     setLoading(false);
   };
@@ -122,8 +130,8 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
               {parsedPdf.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell>{row.date}</TableCell>
-                  <TableCell>{row.value}</TableCell>
+                  <TableCell align="center">{row.date}</TableCell>
+                  <TableCell align="right">{row.value}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

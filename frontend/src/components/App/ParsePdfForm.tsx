@@ -44,8 +44,8 @@ const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
       const data = await response.json();
       onPdfParsed(data);
       toast.success("PDF parsed!");
-    } catch (err) {
-      toast.error("Error parsing PDF");
+    } catch (err: any) {
+      toast.error(err.message ?? "Error parsing PDF");
       console.error(err);
     }
     setLoading(false);
@@ -126,12 +126,5 @@ const ParsePdfForm: React.FC<Props> = ({ onPdfParsed }) => {
     </Grid>
   );
 };
-
-// fields:
-// bank
-// file type (card invoice or bank statement)
-// file upload
-// notion API
-// notion database ID
 
 export default ParsePdfForm;
