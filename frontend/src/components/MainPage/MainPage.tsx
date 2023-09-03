@@ -8,7 +8,7 @@ import ConnectToNotionForm from "./ConnectToNotionForm";
 import ParsePdfForm from "./ParsePdfForm";
 import InsertIntoNotionForm from "./InsertIntoNotionForm";
 
-function App() {
+function MainPage() {
   const [notionToken, setNotionToken] = useState("");
   const [notionDatabaseId, setNotionDatabaseId] = useState("");
 
@@ -70,4 +70,4 @@ function App() {
   );
 }
 
-export default App;
+export default MainPage;

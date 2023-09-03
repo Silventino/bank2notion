@@ -20,6 +20,7 @@ import { NotionProperty, ParsedPdf, SERVER_URL } from "../../constants";
 import CustomSelect from "../CustomSelect";
 import { toast } from "react-toastify";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   notionProperties: NotionProperty[];
@@ -41,6 +42,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
     Record<string, NotionProperty>
   >({});
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -72,6 +74,8 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
       }
 
       toast.success("Data inserted into Notion!");
+
+      navigate("/success");
     } catch (err: any) {
       console.error(err);
       toast.error(err.message ?? "Error inserting data into Notion");
