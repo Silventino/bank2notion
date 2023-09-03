@@ -73,6 +73,7 @@ const ConnectToNotionForm: React.FC<Props> = (props) => {
           value={notionToken}
           onChange={(event) => setNotionToken(event.target.value)}
           disabled={loading}
+          type="password"
         />
       </Grid>
 
