@@ -59,6 +59,7 @@ function App() {
               parsedPdf={parsedPdf}
               notionToken={notionToken}
               notionDatabaseId={notionDatabaseId}
+              setParsedPdf={setParsedPdf}
             />
           )}
         </CardContent>

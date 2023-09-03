@@ -5,6 +5,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -18,16 +19,24 @@ import { useState } from "react";
 import { NotionProperty, ParsedPdf, SERVER_URL } from "../../constants";
 import CustomSelect from "../CustomSelect";
 import { toast } from "react-toastify";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type Props = {
   notionProperties: NotionProperty[];
   parsedPdf: ParsedPdf;
+  setParsedPdf: (value: ParsedPdf) => void;
   notionToken: string;
   notionDatabaseId: string;
 };
 
 const InsertIntoNotionForm: React.FC<Props> = (props) => {
-  const { notionProperties, parsedPdf, notionDatabaseId, notionToken } = props;
+  const {
+    notionProperties,
+    parsedPdf,
+    notionDatabaseId,
+    notionToken,
+    setParsedPdf,
+  } = props;
   const [notionPropertiesMap, setNotionPropertiesMap] = useState<
     Record<string, NotionProperty>
   >({});
@@ -80,6 +89,11 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
     setNotionPropertiesMap(newNotionPropertiesMap);
   };
 
+  const deletePdfEntryByIndex = (index: number) => {
+    const newParsedPdf = parsedPdf.filter((_, i) => i !== index);
+    setParsedPdf(newParsedPdf);
+  };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} display={"flex"} justifyContent={"center"}>
@@ -93,7 +107,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ minWidth: 140 }}>
+                <TableCell sx={{ minWidth: 120 }}>
                   <CustomSelect<NotionProperty>
                     label={"Name"}
                     value={notionPropertiesMap["name"]?.name}
@@ -104,7 +118,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
                     getOptionLabel={(option) => option.name}
                   />
                 </TableCell>
-                <TableCell sx={{ minWidth: 140 }}>
+                <TableCell sx={{ minWidth: 120 }}>
                   <CustomSelect<NotionProperty>
                     label={"Date"}
                     value={notionPropertiesMap["date"]?.name}
@@ -115,7 +129,7 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
                     getOptionLabel={(option) => option.name}
                   />
                 </TableCell>
-                <TableCell sx={{ minWidth: 140 }}>
+                <TableCell sx={{ minWidth: 120 }}>
                   <CustomSelect<NotionProperty>
                     label={"Value"}
                     value={notionPropertiesMap["value"]?.name}
@@ -126,14 +140,20 @@ const InsertIntoNotionForm: React.FC<Props> = (props) => {
                     getOptionLabel={(option) => option.name}
                   />
                 </TableCell>
+                <TableCell></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {parsedPdf.map((row) => (
-                <TableRow key={row.name}>
+              {parsedPdf.map((row, i) => (
+                <TableRow key={`${row.name}.${row.date}.${row.value}`}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell align="center">{row.date}</TableCell>
                   <TableCell align="right">{row.value}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => deletePdfEntryByIndex(i)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
